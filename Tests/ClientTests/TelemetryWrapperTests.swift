@@ -263,7 +263,7 @@ class TelemetryWrapperTests: XCTestCase {
     }
 
     func test_shoppingOnboardingDisplayed_GleanIsCalled() {
-        TelemetryWrapper.recordEvent(category: .action, method: .view, object: .shoppingOnboarding)
+        TelemetryWrapper.recordEvent(category: .action, method: .view, object: .shoppingOptIn)
         testEventMetricRecordingSuccess(metric: GleanMetrics.Shopping.surfaceOnboardingDisplayed)
     }
 

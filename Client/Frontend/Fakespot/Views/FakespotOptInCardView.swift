@@ -226,7 +226,7 @@ final class FakespotOptInCardView: UIView, ThemeApplicable {
     private func sendTelemetryOnAppear() {
         TelemetryWrapper.recordEvent(category: .action,
                                      method: .view,
-                                     object: .shoppingOnboarding)
+                                     object: .shoppingOptIn)
     }
 
     // MARK: - Theming System
