@@ -90,6 +90,26 @@ public struct AccessibilityIdentifiers {
             static let closeButton = "TrackingProtection.CloseButton"
             static let faviconImage = "TrackingProtection.FaviconImage"
         }
+
+        struct DetailsScreen {
+            static let headerView = "TrackingProtectionDetails.HeaderView"
+            static let mainView = "TrackingProtectionDetails.MainView"
+            static let containerView = "TrackingProtectionDetails.BaseView"
+            static let connectionView = "TrackingProtectionDetails.ConnectionView"
+        }
+
+        struct BlockedTrackers {
+            static let headerView = "BlockedTrackers.HeaderView"
+            static let mainView = "BlockedTrackers.MainView"
+            static let containerView = "BlockedTrackers.BaseView"
+            static let crossSiteTrackersView = "BlockedTrackers.CrossSiteTrackersView"
+            static let socialMediaTrackersView = "BlockedTrackers.SocialMediaTrackersView"
+            static let fingerprintersView = "BlockedTrackers.FingerprintersView"
+            static let crossSiteTrackersImage = "BlockedTrackers.CrossSiteTrackersImage"
+            static let socialMediaTrackersImage = "BlockedTrackers.SocialMediaTrackersImage"
+            static let fingerprintersImage = "BlockedTrackers.FingerprintersImage"
+            static let blockedTrackersLabel = "BlockedTrackers.BlockedTrackersLabel"
+        }
     }
 
     struct FirefoxHomepage {

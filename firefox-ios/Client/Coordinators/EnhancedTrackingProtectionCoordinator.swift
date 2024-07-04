@@ -6,6 +6,7 @@ import Common
 import Foundation
 import WebKit
 import Shared
+import ComponentLibrary
 
 protocol EnhancedTrackingProtectionCoordinatorDelegate: AnyObject {
     func didFinishEnhancedTrackingProtection(from coordinator: EnhancedTrackingProtectionCoordinator)
@@ -65,8 +66,16 @@ class EnhancedTrackingProtectionCoordinator: BaseCoordinator,
         trackingProtectionRefactorStatus = featureFlags.isFeatureEnabled(.trackingProtectionRefactor, checking: .buildOnly)
         if trackingProtectionRefactorStatus {
             if UIDevice.current.userInterfaceIdiom == .phone {
-                enhancedTrackingProtectionMenuVC.modalPresentationStyle = .custom
-                enhancedTrackingProtectionMenuVC.transitioningDelegate = self
+                let bottomSheetViewModel = BottomSheetViewModel(
+                    closeButtonA11yLabel: .CloseButtonTitle,
+                    closeButtonA11yIdentifier:
+                        AccessibilityIdentifiers.EnhancedTrackingProtection.MainScreen.closeButton)
+                let bottomSheetVC = BottomSheetViewController(viewModel: bottomSheetViewModel,
+                                                              childViewController: enhancedTrackingProtectionMenuVC)
+//                bottomSheetVC.
+                router.present(bottomSheetVC)
+//                enhancedTrackingProtectionMenuVC.modalPresentationStyle = .custom
+//                enhancedTrackingProtectionMenuVC.transitioningDelegate = self
             } else {
                 enhancedTrackingProtectionMenuVC.asPopover = true
                 if trackingProtectionRefactorStatus {
@@ -75,8 +84,9 @@ class EnhancedTrackingProtectionCoordinator: BaseCoordinator,
                 enhancedTrackingProtectionMenuVC.modalPresentationStyle = .popover
                 enhancedTrackingProtectionMenuVC.popoverPresentationController?.sourceView = sourceView
                 enhancedTrackingProtectionMenuVC.popoverPresentationController?.permittedArrowDirections = .up
+                router.present(enhancedTrackingProtectionMenuVC, animated: true, completion: nil)
             }
-            router.present(enhancedTrackingProtectionMenuVC, animated: true, completion: nil)
+
         } else {
             if UIDevice.current.userInterfaceIdiom == .phone {
                 oldEnhancedTrackingProtectionMenuVC.modalPresentationStyle = .custom

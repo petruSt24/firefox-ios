@@ -17,6 +17,7 @@ struct TPMenuUX {
     }
 
     struct UX {
+        static let baseCellHeight: CGFloat = 44
         static let popoverTopDistance: CGFloat = 20
         static let horizontalMargin: CGFloat = 16
         static let viewCornerRadius: CGFloat = 8
@@ -38,6 +39,14 @@ struct TPMenuUX {
         static let settingsLinkButtonBottomSpacing: CGFloat = 32
         struct Line {
             static let height: CGFloat = 1
+        }
+        struct TrackingDetails {
+            static let baseDistance: CGFloat = 20
+            static let imageMargins: CGFloat = 10
+            static let bottomDistance: CGFloat = 350
+        }
+        struct BlockedTrackers {
+            static let headerDistance: CGFloat = 8
         }
     }
 }
@@ -63,7 +72,7 @@ protocol TrackingProtectionMenuDelegate: AnyObject {
     func didFinish()
 }
 
-class TrackingProtectionVC: UIViewController, Themeable, Notifiable, UIScrollViewDelegate {
+class TrackingProtectionVC: UIViewController, Themeable, Notifiable, UIScrollViewDelegate, BottomSheetChild {
     var themeManager: ThemeManager
     var themeObserver: NSObjectProtocol?
     var notificationCenter: NotificationProtocol
@@ -84,6 +93,7 @@ class TrackingProtectionVC: UIViewController, Themeable, Notifiable, UIScrollVie
     private lazy var scrollView: UIScrollView = .build { scrollView in
         scrollView.translatesAutoresizingMaskIntoConstraints = false
     }
+    private let baseView: UIView = .build { view in }
     private lazy var contentStackView: UIStackView = .build { stackView in
         stackView.axis = .vertical
         stackView.translatesAutoresizingMaskIntoConstraints = false
@@ -321,18 +331,11 @@ class TrackingProtectionVC: UIViewController, Themeable, Notifiable, UIScrollVie
 
     override func viewDidLayoutSubviews() {
         super.viewDidLayoutSubviews()
+        self.view.invalidateIntrinsicContentSize() // Adjusts size based on content.
         if !hasSetPointOrigin {
             hasSetPointOrigin = true
             pointOrigin = self.view.frame.origin
         }
-//        preferredContentSize = CGSize(
-//            width: view.bounds.width,
-//            height: view.systemLayoutSizeFitting(
-//                CGSize(width: view.bounds.width, height: UIView.layoutFittingCompressedSize.height),
-//                withHorizontalFittingPriority: .required,
-//                verticalFittingPriority: .defaultLow
-//            ).height
-//        )
     }
 
     override func viewWillAppear(_ animated: Bool) {
@@ -346,13 +349,13 @@ class TrackingProtectionVC: UIViewController, Themeable, Notifiable, UIScrollVie
 
         setupHeaderView()
         setupContentView()
-//        setupConnectionHeaderView()
-//        setupBlockedTrackersView()
-//        setupConnectionStatusView()
-//        setupToggleView()
-//        setupClearCookiesButton()
-//        setupProtectionSettingsView()
-//        setupViewActions()
+        setupConnectionHeaderView()
+        setupBlockedTrackersView()
+        setupConnectionStatusView()
+        setupToggleView()
+        setupClearCookiesButton()
+        setupProtectionSettingsView()
+        setupViewActions()
 
         NSLayoutConstraint.activate(constraints)
         scrollView.setNeedsLayout()
@@ -363,6 +366,7 @@ class TrackingProtectionVC: UIViewController, Themeable, Notifiable, UIScrollVie
 
     // MARK: Header Setup
     private func setupHeaderView() {
+//        headerContainer.backgroundColor = .magenta
         headerLabelsContainer.addArrangedSubview(siteDisplayTitleLabel)
         headerLabelsContainer.addArrangedSubview(siteDomainLabel)
 
@@ -424,65 +428,22 @@ class TrackingProtectionVC: UIViewController, Themeable, Notifiable, UIScrollVie
     // MARK: Content View
     private func setupContentView() {
         view.addSubview(scrollView)
-        scrollView.addSubview(contentStackView)
+        scrollView.addSubview(baseView)
 
-        let blueView = UIView()
-        blueView.backgroundColor = .blue
-        blueView.translatesAutoresizingMaskIntoConstraints = false
-        blueView.heightAnchor.constraint(equalToConstant: 300).isActive = true
-        contentStackView.addArrangedSubview(blueView)
+        scrollView.isUserInteractionEnabled = true
 
-        NSLayoutConstraint.activate([
-            // Constraints for scrollView
+        let contentViewContraints = [
             scrollView.topAnchor.constraint(equalTo: headerContainer.bottomAnchor),
             scrollView.bottomAnchor.constraint(equalTo: view.bottomAnchor),
             scrollView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
             scrollView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
+            baseView.topAnchor.constraint(equalTo: scrollView.topAnchor),
+            baseView.bottomAnchor.constraint(equalTo: scrollView.bottomAnchor),
+            baseView.centerXAnchor.constraint(equalTo: scrollView.centerXAnchor),
+            baseView.widthAnchor.constraint(equalTo: scrollView.widthAnchor),
+        ]
 
-            // Constraints for contentStackView inside scrollView
-            contentStackView.topAnchor.constraint(equalTo: scrollView.contentLayoutGuide.topAnchor),
-            contentStackView.bottomAnchor.constraint(equalTo: scrollView.contentLayoutGuide.bottomAnchor),
-            contentStackView.leadingAnchor.constraint(equalTo: scrollView.contentLayoutGuide.leadingAnchor),
-            contentStackView.trailingAnchor.constraint(equalTo: scrollView.contentLayoutGuide.trailingAnchor),
-            contentStackView.widthAnchor.constraint(equalTo: scrollView.frameLayoutGuide.widthAnchor),
-
-            // Height constraint for blueView to ensure it is visible
-            blueView.heightAnchor.constraint(equalToConstant: 300) // Adjust the height as needed
-        ])
-
-//        let contentViewConstraints = [
-//            contentStackView.topAnchor.constraint(equalTo: scrollView.topAnchor),
-//            contentStackView.leadingAnchor.constraint(equalTo: scrollView.leadingAnchor,
-//                                                      constant: TPMenuUX.UX.scrollContentHorizontalPadding),
-//            contentStackView.bottomAnchor.constraint(equalTo: scrollView.bottomAnchor,
-//                                                     constant: 0),
-//            contentStackView.trailingAnchor.constraint(equalTo: scrollView.trailingAnchor,
-//                                                       constant: -TPMenuUX.UX.scrollContentHorizontalPadding),
-//            contentStackView.widthAnchor.constraint(equalTo: scrollView.widthAnchor,
-//                                                    constant: -TPMenuUX.UX.scrollContentHorizontalPadding * 2),
-//
-//            scrollView.topAnchor.constraint(equalTo: headerContainer.bottomAnchor),
-//            scrollView.bottomAnchor.constraint(equalTo: view.bottomAnchor),
-//            scrollView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
-//            scrollView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
-//
-////            scrollView.topAnchor.constraint(equalTo: headerContainer.bottomAnchor),
-////            scrollView.bottomAnchor.constraint(equalTo: view.bottomAnchor),
-////            scrollView.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor),
-////            scrollView.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor),
-////            contentStackView.topAnchor.constraint(equalTo: scrollView.contentLayoutGuide.topAnchor,
-////                                                  constant: 0),
-////            contentStackView.bottomAnchor.constraint(equalTo: scrollView.contentLayoutGuide.bottomAnchor,
-////                                                     constant: 0),
-////            contentStackView.leadingAnchor.constraint(equalTo: scrollView.contentLayoutGuide.leadingAnchor,
-////                                                      constant: 0),
-////            contentStackView.trailingAnchor.constraint(equalTo: scrollView.contentLayoutGuide.trailingAnchor,
-////                                                       constant: 0),
-////            contentStackView.widthAnchor.constraint(equalTo: view.widthAnchor),
-////            blueView.widthAnchor.constraint(equalTo: scrollView.frameLayoutGuide.widthAnchor),
-//            blueView.heightAnchor.constraint(equalToConstant: 300),
-//            ]
-//        constraints.append(contentsOf: contentViewConstraints)
+        constraints.append(contentsOf: contentViewContraints)
     }
 
     // MARK: Connection Status Header Setup
@@ -492,20 +453,21 @@ class TrackingProtectionVC: UIViewController, Themeable, Notifiable, UIScrollVie
         connectionDetailsContentView.addSubviews(foxStatusImage, connectionDetailsLabelsContainer)
         connectionDetailsHeaderView.addSubview(connectionDetailsContentView)
 
-        contentStackView.addArrangedSubview(connectionDetailsHeaderView)
-
+//        contentStackView.addArrangedSubview(connectionDetailsHeaderView)
+//        view.addSubview(connectionDetailsHeaderView)
+        baseView.addSubviews(connectionDetailsHeaderView)
         let connectionHeaderConstraints = [
 //            // Section
-//            connectionDetailsHeaderView.leadingAnchor.constraint(
-//                equalTo: scrollView.leadingAnchor,
-//                constant: TPMenuUX.UX.horizontalMargin
-//            ),
-//            connectionDetailsHeaderView.trailingAnchor.constraint(
-//                equalTo: scrollView.trailingAnchor,
-//                constant: -TPMenuUX.UX.horizontalMargin
-//            ),
-//            connectionDetailsHeaderView.topAnchor.constraint(equalTo: headerContainer.bottomAnchor,
-//                                                             constant: 0),
+            connectionDetailsHeaderView.leadingAnchor.constraint(
+                equalTo: view.leadingAnchor,
+                constant: TPMenuUX.UX.horizontalMargin
+            ),
+            connectionDetailsHeaderView.trailingAnchor.constraint(
+                equalTo: view.trailingAnchor,
+                constant: -TPMenuUX.UX.horizontalMargin
+            ),
+            connectionDetailsHeaderView.topAnchor.constraint(equalTo: headerContainer.bottomAnchor,
+                                                             constant: 0),
             // Content
             connectionDetailsContentView.leadingAnchor.constraint(
                 equalTo: connectionDetailsHeaderView.leadingAnchor,
@@ -554,7 +516,12 @@ class TrackingProtectionVC: UIViewController, Themeable, Notifiable, UIScrollVie
     private func setupBlockedTrackersView() {
         trackersView.addSubviews(shieldImage, trackersLabel, trackersDetailArrow, trackersButton, trackersHorizontalLine)
 //        view.addSubview(trackersView)
-        contentStackView.addArrangedSubview(trackersView)
+//        contentStackView.addArrangedSubview(trackersView)
+        baseView.addSubview(trackersView)
+        // Bring subviews to front if necessary
+        scrollView.bringSubviewToFront(trackersButton)
+        view.bringSubviewToFront(trackersView)
+//        scrollView.bringSubviewToFront(toggleSwitch)
 
         shieldImageHeightConstraint = shieldImage.heightAnchor.constraint(equalToConstant: TPMenuUX.UX.iconSize)
         trackersArrowHeightConstraint = trackersDetailArrow.heightAnchor.constraint(
@@ -562,15 +529,15 @@ class TrackingProtectionVC: UIViewController, Themeable, Notifiable, UIScrollVie
         )
 
         let blockedTrackersConstraints = [
-//            trackersView.leadingAnchor.constraint(
-//                equalTo: view.leadingAnchor,
-//                constant: TPMenuUX.UX.horizontalMargin
-//            ),
-//            trackersView.trailingAnchor.constraint(
-//                equalTo: view.trailingAnchor,
-//                constant: -TPMenuUX.UX.horizontalMargin
-//            ),
-//            trackersView.topAnchor.constraint(equalTo: connectionDetailsHeaderView.bottomAnchor, constant: 0),
+            trackersView.leadingAnchor.constraint(
+                equalTo: view.leadingAnchor,
+                constant: TPMenuUX.UX.horizontalMargin
+            ),
+            trackersView.trailingAnchor.constraint(
+                equalTo: view.trailingAnchor,
+                constant: -TPMenuUX.UX.horizontalMargin
+            ),
+            trackersView.topAnchor.constraint(equalTo: connectionDetailsHeaderView.bottomAnchor, constant: 0),
 
             shieldImage.leadingAnchor.constraint(
                 equalTo: trackersView.leadingAnchor,
@@ -618,7 +585,8 @@ class TrackingProtectionVC: UIViewController, Themeable, Notifiable, UIScrollVie
         connectionView.addSubviews(connectionStatusImage, connectionStatusLabel, connectionDetailArrow)
         connectionView.addSubviews(connectionButton, connectionHorizontalLine)
 //        view.addSubview(connectionView)
-        contentStackView.addArrangedSubview(connectionView)
+//        contentStackView.addArrangedSubview(connectionView)
+        baseView.addSubviews(connectionView)
 
         lockImageHeightConstraint = connectionStatusImage.widthAnchor.constraint(
             equalToConstant: TPMenuUX.UX.iconSize
@@ -627,15 +595,15 @@ class TrackingProtectionVC: UIViewController, Themeable, Notifiable, UIScrollVie
             equalToConstant: TPMenuUX.UX.iconSize
         )
         let connectionConstraints = [
-//            connectionView.leadingAnchor.constraint(
-//                equalTo: view.leadingAnchor,
-//                constant: TPMenuUX.UX.horizontalMargin
-//            ),
-//            connectionView.trailingAnchor.constraint(
-//                equalTo: view.trailingAnchor,
-//                constant: -TPMenuUX.UX.horizontalMargin
-//            ),
-//            connectionView.topAnchor.constraint(equalTo: trackersView.bottomAnchor, constant: 0),
+            connectionView.leadingAnchor.constraint(
+                equalTo: view.leadingAnchor,
+                constant: TPMenuUX.UX.horizontalMargin
+            ),
+            connectionView.trailingAnchor.constraint(
+                equalTo: view.trailingAnchor,
+                constant: -TPMenuUX.UX.horizontalMargin
+            ),
+            connectionView.topAnchor.constraint(equalTo: trackersView.bottomAnchor, constant: 0),
 
             connectionStatusImage.leadingAnchor.constraint(
                 equalTo: connectionView.leadingAnchor,
@@ -682,18 +650,20 @@ class TrackingProtectionVC: UIViewController, Themeable, Notifiable, UIScrollVie
     private func setupToggleView() {
         toggleLabelsContainer.addArrangedSubview(toggleLabel)
         toggleLabelsContainer.addArrangedSubview(toggleStatusLabel)
+//        toggleLabelsContainer.backgroundColor = .green
         toggleView.addSubviews(toggleLabelsContainer, toggleSwitch)
         toggleContainer.addSubviews(toggleView)
+        baseView.addSubviews(toggleContainer)
 //        view.addSubview(toggleContainer)
-        contentStackView.addArrangedSubview(toggleContainer)
+//        contentStackView.addArrangedSubview(toggleContainer)
 
         let toggleConstraints = [
-//            toggleContainer.leadingAnchor.constraint(equalTo: view.leadingAnchor),
-//            toggleContainer.trailingAnchor.constraint(equalTo: view.trailingAnchor),
-//            toggleContainer.topAnchor.constraint(
-//                equalTo: connectionView.bottomAnchor,
-//                constant: 0
-//            ),
+            toggleContainer.leadingAnchor.constraint(equalTo: view.leadingAnchor),
+            toggleContainer.trailingAnchor.constraint(equalTo: view.trailingAnchor),
+            toggleContainer.topAnchor.constraint(
+                equalTo: connectionView.bottomAnchor,
+                constant: 0
+            ),
 
             toggleView.leadingAnchor.constraint(
                 equalTo: toggleContainer.leadingAnchor,
@@ -723,8 +693,6 @@ class TrackingProtectionVC: UIViewController, Themeable, Notifiable, UIScrollVie
             ),
 
             toggleSwitch.centerYAnchor.constraint(equalTo: toggleView.centerYAnchor),
-            toggleSwitch.widthAnchor.constraint(equalToConstant: 51),
-            toggleSwitch.heightAnchor.constraint(equalToConstant: 31),
             toggleSwitch.trailingAnchor.constraint(
                 equalTo: toggleView.trailingAnchor,
                 constant: -TPMenuUX.UX.horizontalMargin
@@ -741,27 +709,29 @@ class TrackingProtectionVC: UIViewController, Themeable, Notifiable, UIScrollVie
         clearCookiesButton.configure(viewModel: clearCookiesViewModel)
 
 //        view.addSubview(clearCookiesButton)
-        contentStackView.addArrangedSubview(clearCookiesButton)
+//        contentStackView.addArrangedSubview(clearCookiesButton)
+        baseView.addSubviews(clearCookiesButton)
+        view.bringSubviewToFront(clearCookiesButton)
 
-//        let clearCookiesButtonConstraints = [
-//            clearCookiesButton.leadingAnchor.constraint(
-//                equalTo: view.leadingAnchor,
-//                constant: TPMenuUX.UX.horizontalMargin
-//            ),
-//            clearCookiesButton.trailingAnchor.constraint(
-//                equalTo: view.trailingAnchor,
-//                constant: -TPMenuUX.UX.horizontalMargin
-//            ),
-//            clearCookiesButton.topAnchor.constraint(
-//                equalTo: toggleView.bottomAnchor,
-//                constant: TPMenuUX.UX.horizontalMargin
-//            ),
-//            clearCookiesButton.bottomAnchor.constraint(
-//                equalTo: settingsLinkButton.topAnchor,
-//                constant: -TPMenuUX.UX.horizontalMargin
-//            ),
-//        ]
-//        constraints.append(contentsOf: clearCookiesButtonConstraints)
+        let clearCookiesButtonConstraints = [
+            clearCookiesButton.leadingAnchor.constraint(
+                equalTo: view.leadingAnchor,
+                constant: TPMenuUX.UX.horizontalMargin
+            ),
+            clearCookiesButton.trailingAnchor.constraint(
+                equalTo: view.trailingAnchor,
+                constant: -TPMenuUX.UX.horizontalMargin
+            ),
+            clearCookiesButton.topAnchor.constraint(
+                equalTo: toggleView.bottomAnchor,
+                constant: TPMenuUX.UX.horizontalMargin
+            ),
+            clearCookiesButton.bottomAnchor.constraint(
+                equalTo: settingsLinkButton.topAnchor,
+                constant: -TPMenuUX.UX.horizontalMargin
+            ),
+        ]
+        constraints.append(contentsOf: clearCookiesButtonConstraints)
     }
 
     // MARK: Settings View Setup
@@ -770,24 +740,25 @@ class TrackingProtectionVC: UIViewController, Themeable, Notifiable, UIScrollVie
                                                           a11yIdentifier: viewModel.settingsA11yId)
         settingsLinkButton.configure(viewModel: settingsButtonViewModel)
 //        view.addSubview(settingsLinkButton)
-        contentStackView.addArrangedSubview(settingsLinkButton)
+//        contentStackView.addArrangedSubview(settingsLinkButton)
+        baseView.addSubviews(settingsLinkButton)
 
-//        let protectionConstraints = [
-//            settingsLinkButton.leadingAnchor.constraint(
-//                equalTo: view.leadingAnchor,
-//                constant: TPMenuUX.UX.horizontalMargin
-//            ),
-//            settingsLinkButton.trailingAnchor.constraint(
-//                equalTo: view.trailingAnchor,
-//                constant: -TPMenuUX.UX.horizontalMargin
-//            ),
-//            settingsLinkButton.bottomAnchor.constraint(
-//                equalTo: view.bottomAnchor,
-//                constant: -TPMenuUX.UX.settingsLinkButtonBottomSpacing
-//            ),
-//        ]
-//
-//        constraints.append(contentsOf: protectionConstraints)
+        let protectionConstraints = [
+            settingsLinkButton.leadingAnchor.constraint(
+                equalTo: view.leadingAnchor,
+                constant: TPMenuUX.UX.horizontalMargin
+            ),
+            settingsLinkButton.trailingAnchor.constraint(
+                equalTo: view.trailingAnchor,
+                constant: -TPMenuUX.UX.horizontalMargin
+            ),
+            settingsLinkButton.bottomAnchor.constraint(
+                equalTo: view.bottomAnchor,
+                constant: -TPMenuUX.UX.settingsLinkButtonBottomSpacing
+            ),
+        ]
+
+        constraints.append(contentsOf: protectionConstraints)
     }
 
     private func updateViewDetails() {
@@ -813,6 +784,7 @@ class TrackingProtectionVC: UIViewController, Themeable, Notifiable, UIScrollVie
     private func setupViewActions() {
         closeButton.addTarget(self, action: #selector(closeButtonTapped), for: .touchUpInside)
         connectionButton.addTarget(self, action: #selector(connectionDetailsTapped), for: .touchUpInside)
+        trackersButton.addTarget(self, action: #selector(blockedTrackersTapped), for: .touchUpInside)
         toggleSwitch.addTarget(self, action: #selector(trackingProtectionToggleTapped), for: .valueChanged)
     }
 
@@ -891,9 +863,18 @@ class TrackingProtectionVC: UIViewController, Themeable, Notifiable, UIScrollVie
 
     @objc
     func connectionDetailsTapped() {
-        let detailsVC = EnhancedTrackingProtectionDetailsVC(with: viewModel.getDetailsViewModel(), windowUUID: windowUUID)
+        let detailsVC = TrackingProtectionDetailsViewController(with: viewModel.getDetailsViewModel(),
+                                                                windowUUID: windowUUID)
         detailsVC.modalPresentationStyle = .pageSheet
         self.present(detailsVC, animated: true)
+    }
+
+    @objc
+    func blockedTrackersTapped() {
+        let blockedTrackersVC = BlockedTrackersViewController(with: viewModel.getBlockedTrackersViewModel(),
+                                                              windowUUID: windowUUID)
+        blockedTrackersVC.modalPresentationStyle = .pageSheet
+        self.present(blockedTrackersVC, animated: true)
     }
 
     @objc
@@ -948,6 +929,9 @@ class TrackingProtectionVC: UIViewController, Themeable, Notifiable, UIScrollVie
 
     private func currentTheme() -> Theme {
         return themeManager.currentTheme(for: windowUUID)
+    }
+
+    func willDismiss() {
     }
 }
 

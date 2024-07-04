@@ -108,13 +108,22 @@ class TrackingProtectionViewModel {
         }
     }
 
-    func getDetailsViewModel() -> EnhancedTrackingProtectionDetailsVM {
-        return EnhancedTrackingProtectionDetailsVM(topLevelDomain: websiteTitle,
-                                                   title: displayTitle,
-                                                   URL: url.absoluteDisplayString,
-                                                   getLockIcon: getConnectionStatusImage(themeType:),
-                                                   connectionStatusMessage: connectionStatusString,
-                                                   connectionSecure: connectionSecure)
+    func getDetailsViewModel() -> TrackingProtectionDetailsViewModel {
+        return TrackingProtectionDetailsViewModel(topLevelDomain: websiteTitle,
+                                                  title: displayTitle,
+                                                  URL: url.absoluteDisplayString,
+                                                  getLockIcon: getConnectionStatusImage(themeType:),
+                                                  connectionStatusMessage: connectionStatusString,
+                                                  connectionSecure: connectionSecure)
+    }
+
+    func getBlockedTrackersViewModel() -> BlockedTrackersViewModel {
+        return BlockedTrackersViewModel(topLevelDomain: websiteTitle,
+                                        title: displayTitle,
+                                        URL: url.absoluteDisplayString,
+                                        getLockIcon: getConnectionStatusImage(themeType:),
+                                        connectionStatusMessage: connectionStatusString,
+                                        connectionSecure: connectionSecure)
     }
 
     func toggleSiteSafelistStatus() {

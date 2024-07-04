@@ -982,11 +982,13 @@
 		AB03032B2AB47AF300DCD8EF /* FakespotOptInCardView.swift in Sources */ = {isa = PBXBuildFile; fileRef = AB0303292AB47AF300DCD8EF /* FakespotOptInCardView.swift */; };
 		AB03032C2AB47AF300DCD8EF /* FakespotOptInCardViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = AB03032A2AB47AF300DCD8EF /* FakespotOptInCardViewModel.swift */; };
 		AB03032F2AB8561700DCD8EF /* FakespotOptInViewModelTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = AB03032D2AB484B700DCD8EF /* FakespotOptInViewModelTests.swift */; };
+		AB27AFBD2C35BB91007BC31C /* TrackingProtectionDetailsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = AB27AFBC2C35BB91007BC31C /* TrackingProtectionDetailsViewController.swift */; };
 		AB2AC6632BCFD0A200022AAB /* X509 in Frameworks */ = {isa = PBXBuildFile; productRef = AB2AC6622BCFD0A200022AAB /* X509 */; };
 		AB2AC6662BD15E6300022AAB /* CertificatesHandler.swift in Sources */ = {isa = PBXBuildFile; fileRef = AB2AC6652BD15E6300022AAB /* CertificatesHandler.swift */; };
 		AB3DB0C92B596739001D32CB /* AppStartupTelemetry.swift in Sources */ = {isa = PBXBuildFile; fileRef = AB3DB0C82B596739001D32CB /* AppStartupTelemetry.swift */; };
 		AB42CC742A1F5240003C9594 /* CreditCardBottomSheetViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = AB42CC722A1F523F003C9594 /* CreditCardBottomSheetViewController.swift */; };
 		AB42CC752A1F5240003C9594 /* CreditCardBottomSheetHeaderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = AB42CC732A1F5240003C9594 /* CreditCardBottomSheetHeaderView.swift */; };
+		AB4DD6A42C36144A00767EBF /* BlockedTrackersViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = AB4DD6A32C36144A00767EBF /* BlockedTrackersViewController.swift */; };
 		AB52ED3B2A0E8873001067F5 /* UserConversionMetrics.swift in Sources */ = {isa = PBXBuildFile; fileRef = AB52ED3A2A0E8873001067F5 /* UserConversionMetrics.swift */; };
 		AB61DE432BEBA05D00DE194E /* TrackingProtectionVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = AB61DE422BEBA05D00DE194E /* TrackingProtectionVC.swift */; };
 		AB61DE472BF3609300DE194E /* TrackingProtectionViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = AB61DE462BF3609200DE194E /* TrackingProtectionViewModel.swift */; };
@@ -6527,11 +6529,13 @@
 		AB0303292AB47AF300DCD8EF /* FakespotOptInCardView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FakespotOptInCardView.swift; sourceTree = "<group>"; };
 		AB03032A2AB47AF300DCD8EF /* FakespotOptInCardViewModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FakespotOptInCardViewModel.swift; sourceTree = "<group>"; };
 		AB03032D2AB484B700DCD8EF /* FakespotOptInViewModelTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FakespotOptInViewModelTests.swift; sourceTree = "<group>"; };
+		AB27AFBC2C35BB91007BC31C /* TrackingProtectionDetailsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TrackingProtectionDetailsViewController.swift; sourceTree = "<group>"; };
 		AB2AC6652BD15E6300022AAB /* CertificatesHandler.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CertificatesHandler.swift; sourceTree = "<group>"; };
 		AB2B45078A7F1E09F65ACEC5 /* cy */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = cy; path = cy.lproj/Shared.strings; sourceTree = "<group>"; };
 		AB3DB0C82B596739001D32CB /* AppStartupTelemetry.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppStartupTelemetry.swift; sourceTree = "<group>"; };
 		AB42CC722A1F523F003C9594 /* CreditCardBottomSheetViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CreditCardBottomSheetViewController.swift; sourceTree = "<group>"; };
 		AB42CC732A1F5240003C9594 /* CreditCardBottomSheetHeaderView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CreditCardBottomSheetHeaderView.swift; sourceTree = "<group>"; };
+		AB4DD6A32C36144A00767EBF /* BlockedTrackersViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BlockedTrackersViewController.swift; sourceTree = "<group>"; };
 		AB52ED3A2A0E8873001067F5 /* UserConversionMetrics.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserConversionMetrics.swift; sourceTree = "<group>"; };
 		AB61DE422BEBA05D00DE194E /* TrackingProtectionVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TrackingProtectionVC.swift; sourceTree = "<group>"; };
 		AB61DE462BF3609200DE194E /* TrackingProtectionViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TrackingProtectionViewModel.swift; sourceTree = "<group>"; };
@@ -10346,6 +10350,8 @@
 			children = (
 				AB2AC6652BD15E6300022AAB /* CertificatesHandler.swift */,
 				AB61DE422BEBA05D00DE194E /* TrackingProtectionVC.swift */,
+				AB27AFBC2C35BB91007BC31C /* TrackingProtectionDetailsViewController.swift */,
+				AB4DD6A32C36144A00767EBF /* BlockedTrackersViewController.swift */,
 				AB61DE462BF3609200DE194E /* TrackingProtectionViewModel.swift */,
 				AB936A682C05F2B100600F82 /* TrackingProtectionButton.swift */,
 			);
@@ -14289,6 +14295,7 @@
 				E698FFDA1B4AADF40001F623 /* TabScrollController.swift in Sources */,
 				8A359EF32A1FD449004A5BB7 /* AdjustWrapper.swift in Sources */,
 				8AAEBA022BF5110A000C02B5 /* MicrosurveyAction.swift in Sources */,
+				AB4DD6A42C36144A00767EBF /* BlockedTrackersViewController.swift in Sources */,
 				D34510881ACF415700EC27F0 /* SearchLoader.swift in Sources */,
 				E17496402994302D0096900A /* PreferredFont.swift in Sources */,
 				E1442FD4294782D9003680B0 /* URL+Mail.swift in Sources */,
@@ -14314,6 +14321,7 @@
 				8A19ACB22A3290AE001C2147 /* ClearPrivateDataSetting.swift in Sources */,
 				CA520E7A24913C1B00CCAB48 /* PasswordManagerViewModel.swift in Sources */,
 				8AE1E1CD27B191110024C45E /* SearchBarSettingsViewModel.swift in Sources */,
+				AB27AFBD2C35BB91007BC31C /* TrackingProtectionDetailsViewController.swift in Sources */,
 				43D16B8529831EA5009F8279 /* Style.swift in Sources */,
 				E16258EF2A83BE0800522742 /* FakespotLoadingView.swift in Sources */,
 				8A19ACAB2A32895E001C2147 /* BrowserNavigationHandler.swift in Sources */,
